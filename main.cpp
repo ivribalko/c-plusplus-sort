@@ -71,27 +71,47 @@ vector<int> insertionSort(vector<int> array)
     return array;
 }
 
-void sort(vector<int> array,
-          vector<int> sorting(vector<int> array),
-          string name)
+chrono::nanoseconds sort(
+    vector<int> &array,
+    vector<int> sorting(vector<int> array))
 {
     auto start = chrono::high_resolution_clock::now();
     auto sorted = sorting(array);
     auto finish = chrono::high_resolution_clock::now();
 
-    cout << name << " took: " << (finish - start).count() / 1000 << endl;
+    // for (int i = 0; i < sorted.size() - 1; i++)
+    // {
+    //     assert(sorted[i] <= sorted[i + 1]);
+    // }
 
-    for (int i = 0; i < sorted.size() - 1; i++)
+    return finish - start;
+}
+
+void test(vector<int> sorting(vector<int> array), string name)
+{
+    chrono::nanoseconds elapsed(0);
+
+    for (int i = 0; i < 10; i++)
     {
-        assert(sorted[i] <= sorted[i + 1]);
+        auto unsorted = getUnsortedArray(1000);
+
+        elapsed += sort(unsorted, sorting);
+
+        if (i != 0)
+        {
+            elapsed /= 2;
+        }
     }
+
+    cout << name
+         << " algorithm took: "
+         << fixed
+         << (float)elapsed.count() / 1000000000
+         << endl;
 }
 
 int main()
 {
-    auto unsorted = getUnsortedArray(1000);
-
-    sort(unsorted, bubbleSort, "bubbleSort");
-
-    sort(unsorted, insertionSort, "insertionSort");
+    test(bubbleSort, "bubble sort");
+    test(insertionSort, "insertion sort");
 }
