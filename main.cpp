@@ -1,6 +1,7 @@
 #include <chrono>
 #include <iostream>
 #include <vector>
+#include "sort.hpp"
 
 using namespace std;
 
@@ -19,28 +20,6 @@ vector<int> getUnsortedArray(int size)
     {
         swap(array[i], array[rand() % size]);
     }
-
-    return array;
-}
-
-vector<int> bubbleSort(vector<int> array)
-{
-    int swappedCountBefore = 0;
-    int swappedCountAfter = 0;
-    int size = array.size();
-    do
-    {
-        swappedCountAfter = swappedCountBefore;
-
-        for (int i = 0; i < size - 1; i++)
-        {
-            if (array[i] > array[i + 1])
-            {
-                swap(array[i], array[i + 1]);
-                swappedCountAfter++;
-            }
-        }
-    } while (swappedCountBefore != swappedCountAfter);
 
     return array;
 }
@@ -71,47 +50,34 @@ vector<int> insertionSort(vector<int> array)
     return array;
 }
 
-chrono::nanoseconds sort(
-    vector<int> &array,
-    vector<int> sorting(vector<int> array))
+void test(vector<Sort::Base *> sorters)
 {
-    auto start = chrono::high_resolution_clock::now();
-    auto sorted = sorting(array);
-    auto finish = chrono::high_resolution_clock::now();
-
-    // for (int i = 0; i < sorted.size() - 1; i++)
-    // {
-    //     assert(sorted[i] <= sorted[i + 1]);
-    // }
-
-    return finish - start;
-}
-
-void test(vector<int> sorting(vector<int> array), string name)
-{
-    chrono::nanoseconds elapsed(0);
-
     for (int i = 0; i < 10; i++)
     {
         auto unsorted = getUnsortedArray(1000);
 
-        elapsed += sort(unsorted, sorting);
-
-        if (i != 0)
+        for (int i = 0; i < sorters.size(); i++)
         {
-            elapsed /= 2;
+            (*sorters[i]).sort(unsorted);
         }
     }
 
-    cout << name
-         << " algorithm took: "
-         << fixed
-         << (float)elapsed.count() / 1000000000
-         << endl;
+    for (int i = 0; i < sorters.size(); i++)
+    {
+        cout << (*sorters[i]).name
+             << " algorithm took: "
+             << fixed
+             << (float)(*sorters[i]).averageTime.count() / 1000000000
+             << endl;
+    }
 }
 
 int main()
 {
-    test(bubbleSort, "bubble sort");
-    test(insertionSort, "insertion sort");
+    auto sortBubble = Sort::Bubble();
+    auto *sortBubblePtr = &sortBubble;
+
+    test(vector<Sort::Base *>{
+        sortBubblePtr,
+    });
 }
