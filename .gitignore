@@ -2,3 +2,4 @@ main.dSYM/Contents/Info.plist
 main
 *.o
 *.out
+build/
