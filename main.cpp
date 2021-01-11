@@ -24,32 +24,6 @@ vector<int> getUnsortedArray(int size)
     return array;
 }
 
-vector<int> insertionSort(vector<int> array)
-{
-    int size = array.size();
-
-    for (int i = 1; i < size; i++)
-    {
-        int element = array[i];
-        int fromIndex = i;
-        int toIndex = i;
-
-        while (toIndex >= 1 && element < array[toIndex - 1])
-        {
-            toIndex--;
-        }
-
-        if (fromIndex != toIndex)
-        {
-            auto from = array.begin() + fromIndex;
-            auto to = array.begin() + toIndex;
-            rotate(to, from, from + 1);
-        }
-    }
-
-    return array;
-}
-
 void test(vector<Sort::Base *> sorters)
 {
     for (int i = 0; i < 10; i++)
@@ -67,7 +41,7 @@ void test(vector<Sort::Base *> sorters)
         cout << (*sorters[i]).name
              << " algorithm took: "
              << fixed
-             << (float)(*sorters[i]).averageTime.count() / 1000000000
+             << (float)(*sorters[i]).averageTime.count() / 1000000
              << endl;
     }
 }
@@ -77,7 +51,15 @@ int main()
     auto sortBubble = Sort::Bubble();
     auto *sortBubblePtr = &sortBubble;
 
+    auto sortSelection = Sort::Selection();
+    auto *sortSelectionPtr = &sortSelection;
+
+    auto sortInsertion = Sort::Insertion();
+    auto *sortInsertionPtr = &sortInsertion;
+
     test(vector<Sort::Base *>{
         sortBubblePtr,
+        sortSelectionPtr,
+        sortInsertionPtr,
     });
 }

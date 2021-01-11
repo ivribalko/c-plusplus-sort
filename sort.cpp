@@ -1,4 +1,4 @@
-#include <chrono> // TODO don't include in h
+#include <chrono>
 #include <vector>
 #include <string>
 #include "sort.hpp"
@@ -7,8 +7,8 @@ using namespace std;
 
 namespace Sort
 {
-    Base::Base() : averageTime(chrono::nanoseconds(0)),
-                   name("undefined") {}
+    Base::Base(string name) : averageTime(chrono::nanoseconds(0)),
+                              name(name) {}
 
     void Base::sort(vector<int> array)
     {
@@ -21,16 +21,12 @@ namespace Sort
             assert(sorted[i] <= sorted[i + 1]);
         }
 
-        if (averageTime.count() == 0) // TODO ternary
-        {
-            averageTime += finish - start;
-        }
-        else
-        {
-            averageTime += finish - start;
-            averageTime /= 2;
-        }
+        averageTime = averageTime.count() == 0
+                          ? finish - start
+                          : (averageTime + finish - start) / 2;
     }
+
+    Bubble::Bubble() : Base("Bubble") {}
 
     vector<int> Bubble::sorting(vector<int> &array)
     {
@@ -53,4 +49,58 @@ namespace Sort
 
         return array;
     }
-} // namespace Sort
+
+    Insertion::Insertion() : Base("Insertion") {}
+
+    vector<int> Insertion::sorting(vector<int> &array)
+    {
+        int size = array.size();
+
+        for (int i = 1; i < size; i++)
+        {
+            int element = array[i];
+            int fromIndex = i;
+            int toIndex = i;
+
+            while (toIndex >= 1 && element < array[toIndex - 1])
+            {
+                toIndex--;
+            }
+
+            if (fromIndex != toIndex)
+            {
+                auto from = array.begin() + fromIndex;
+                auto to = array.begin() + toIndex;
+                rotate(to, from, from + 1);
+            }
+        }
+
+        return array;
+    }
+
+    Selection::Selection() : Base("Selection") {}
+
+    vector<int> Selection::sorting(vector<int> &array)
+    {
+        vector<int> sorted;
+
+        for (int i = 0; i < array.size(); i++)
+        {
+            int index = 0;
+            int minimum = array[index];
+            for (int j = 1; j < array.size(); j++)
+            {
+                int element = array[j];
+                if (element < minimum)
+                {
+                    index = j;
+                    minimum = element;
+                }
+            }
+            array.erase(array.begin() + index);
+            sorted.push_back(minimum);
+        }
+
+        return sorted;
+    }
+}
