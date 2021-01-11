@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 
+// TODO C++ 20 export
+
 namespace Sort
 {
     class Base
@@ -10,12 +12,13 @@ namespace Sort
         Base(std::string name);
         std::string name;
         std::chrono::nanoseconds averageTime;
-        void sort(std::vector<int> array);
+        void sort(std::vector<int> &array);
 
     protected:
         virtual std::vector<int> sorting(std::vector<int> &array) = 0;
     };
 
+    // TODO can typedef something to prevent this boilerplate classes?
     class Bubble : public Base
     {
     public:

@@ -10,12 +10,13 @@ namespace Sort
     Base::Base(string name) : averageTime(chrono::nanoseconds(0)),
                               name(name) {}
 
-    void Base::sort(vector<int> array)
+    void Base::sort(vector<int> &array)
     {
         auto start = chrono::high_resolution_clock::now();
         auto sorted = sorting(array);
         auto finish = chrono::high_resolution_clock::now();
 
+        // TODO how to strip from release build?
         for (int i = 0; i < sorted.size() - 1; i++)
         {
             assert(sorted[i] <= sorted[i + 1]);
@@ -82,7 +83,7 @@ namespace Sort
 
     vector<int> Selection::sorting(vector<int> &array)
     {
-        vector<int> sorted;
+        vector<int> sorted; // TODO nn for copy just swap
 
         for (int i = 0; i < array.size(); i++)
         {

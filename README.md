@@ -11,6 +11,7 @@ Creates random arrays and prints the algorithms sorting time on those.
 - Template class.
 - More algorithms.
 - Verify pointers.
+- vector to array.
 - swap() vs rotate().
 - Optimize implementations.
 - C++ 20 format() and modules.
